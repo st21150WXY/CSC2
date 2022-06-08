@@ -35,14 +35,19 @@ def setup_buttons():
     # Creates an empty entry and labels along with a dropdown menu
     Label(main_window, text="Customer Name").grid(column=0, row=0, sticky=E)
     customer_name = Entry(main_window)
+    customer_name.grid(column=1, row=0)
     Label(main_window, text="Item Hired").grid(column=0, row=1, sticky=E)
     item_hired = Entry(main_window)
+    item_hired.grid(column=1, row=1)
     Label(main_window, text="Number of Item Hired").grid(column=0, row=2, sticky=E)
     number_of_item_hired = Entry(main_window)
-    Label(main_window, text="Receipt Number")
+    number_of_item_hired.grid(column=1, row=2)
+    Label(main_window, text="Receipt Number").grid(column=0, row=3, sticky=E)
     customer_receipt = Entry(main_window)
+    customer_receipt.grid(column=1, row=3)
     Label(main_window, text="Row #").grid(column=3, row=2, sticky=E)
     delete_item = Entry(main_window)
+    delete_item.grid(column=4, row=2)
 
     # Button Widgets
     Button(main_window, text="Append Details", command=insert_inputs).grid(column=3, row=1)
@@ -59,6 +64,7 @@ def main():
     total_entries = 0
     # Creating the GUI and setup
     main_window = Tk()
+    main_window.title("App")
     setup_buttons()
     main_window.mainloop()
 
