@@ -9,13 +9,13 @@ Assessment Summary Details:
 - GUI (Base)
 - Button Widgets
 - Looping
-csc2
+
 """
 
 from tkinter import *  # This imports all the functions from tkinter module
 
 # Set up for buttons, a function
-"""def setup_buttons():
+def setup_buttons():
     # These global variables are used to define variables that are used
     global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries, delete_item
 
@@ -26,7 +26,7 @@ from tkinter import *  # This imports all the functions from tkinter module
     item_hired = Entry(main_window)
     Label(main_window, text="Number of Item Hired").grid(column=0, row=2, sticky=E)
     number_of_item_hired = Entry(main_window)
-    Label(main_window, text="Receipt Number")"""
+    Label(main_window, text="Receipt Number")
 
 def main():
     # These global variables are used to define variables that are used
