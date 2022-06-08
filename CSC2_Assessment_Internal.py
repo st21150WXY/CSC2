@@ -14,14 +14,27 @@ Assessment Summary Details:
 
 from tkinter import *  # This imports all the functions from tkinter module
 
+# This will quit the subroutine
 def quit():
-    pass
+    main_window.destroy()
 
-def insert_inputs():
-    pass
-
+#
 def print_customer_details():
     pass
+
+# This function will append all the details inputted in the entries and checks them
+def append_inputs():
+    # Global variables that are used
+    global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries
+    # Checks if the user has inputted the name of the customer
+    if len(customer_name.get()) != 0:
+        # Appends every detail into one list
+        customer_details.append([customer_name.get(), item_hired.get(), number_of_item_hired.get(), customer_receipt.get()])
+        customer_name.delete(0, 'end')
+        item_hired.delete(0, 'end')
+        number_of_item_hired.delete(0, 'end')
+        customer_receipt.delete(0, 'end')
+        total_entries += 1
 
 def delete_row():
     pass
@@ -50,7 +63,7 @@ def setup_buttons():
     delete_item.grid(column=4, row=2)
 
     # Button Widgets
-    Button(main_window, text="Append Details", command=insert_inputs).grid(column=3, row=1)
+    Button(main_window, text="Append Details", command=append_inputs).grid(column=3, row=1)
     Button(main_window, text="Print Details", command=print_customer_details, width=10).grid(column=4, row=1, sticky=E)
     Button(main_window, text="Quit", command=quit, width=10).grid(column=4, row=0, sticky=E)
     Button(main_window, text="Delete Row", command=delete_row, width=10).grid(column=4, row=3, sticky=E)
