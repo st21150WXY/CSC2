@@ -14,46 +14,63 @@ Assessment Summary Details:
 
 from tkinter import *  # This imports all the functions from tkinter module
 
+
 # This will quit the subroutine
 def quit():
     main_window.destroy()
+
 
 # Prints the customer details after appending it
 def print_customer_details():
     # Global variables that are used
     global total_entries, name_count
     name_count = 0
-    Label(main_window, text="Row", font='bold').grid(column=3, row=1, columnspan=1)
-    Label(main_window, text="Customer Name", font='bold').grid(column=4, row=1, columnspan=1)
-    Label(main_window, text="Item Hired", font='bold').grid(column=5, row=1, columnspan=1)
-    Label(main_window, text="Number of Item Hired", font='bold').grid(column=6, row=1, columnspan=1)
-    Label(main_window, text="Receipt Number", font='bold').grid(column=7, row=1, columnspan=1)
+    Label(main_window, text="Row", font=('bold', 12, 'underline')).grid(column=0, row=8, columnspan=1)
+    Label(main_window, text="Customer Name", font=('bold', 12, 'underline')).grid(column=1, row=8, columnspan=1)
+    Label(main_window, text="Item Hired", font=('bold', 12, 'underline')).grid(column=2, row=8, columnspan=1)
+    Label(main_window, text="Number of Item Hired", font=('bold', 12, 'underline')).grid(column=3, row=8, columnspan=1)
+    Label(main_window, text="Receipt Number", font=('bold', 12, 'underline')).grid(column=4, row=8, columnspan=1)
 
     # Multi-Dimensional List
     while name_count < total_entries:
-        Label(main_window, text=name_count).grid(column=3, row=name_count + 2, columnspan=1)
-        Label(main_window, text=(customer_details[name_count][0])).grid(column=4, row=name_count + 2, columnspan=1)
-        Label(main_window, text=(customer_details[name_count][1])).grid(column=5, row=name_count + 2, columnspan=1)
-        Label(main_window, text=(customer_details[name_count][2])).grid(column=6, row=name_count + 2, columnspan=1)
-        Label(main_window, text=(customer_details[name_count][3])).grid(column=7, row=name_count + 2, columnspan=1)
+        Label(main_window, text=name_count).grid(column=0, row=name_count + 9, columnspan=1)
+        Label(main_window, text=(customer_details[name_count][0])).grid(column=1, row=name_count + 9, columnspan=1)
+        Label(main_window, text=(customer_details[name_count][1])).grid(column=2, row=name_count + 9, columnspan=1)
+        Label(main_window, text=(customer_details[name_count][2])).grid(column=3, row=name_count + 9, columnspan=1)
+        Label(main_window, text=(customer_details[name_count][3])).grid(column=4, row=name_count + 9, columnspan=1)
         name_count += 1
+
 
 # This function will append all the details inputted in the entries and checks them
 def append_inputs():
     # Global variables that are used
     global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries
-    # Checks if the user has inputted the name of the customer
-    if len(customer_name.get()) != 0:
-        # Appends every detail into one list
-        customer_details.append([customer_name.get(), item_hired.get(), number_of_item_hired.get(), customer_receipt.get()])
-        customer_name.delete(0, 'end')
-        item_hired.delete(0, 'end')
-        number_of_item_hired.delete(0, 'end')
-        customer_receipt.delete(0, 'end')
-        total_entries += 1
+    # Appends every detail into one list
+    customer_details.append([customer_name.get(), item_hired.get(), number_of_item_hired.get(), customer_receipt.get()])
+    customer_name.delete(0, 'end')
+    item_hired.delete(0, 'end')
+    number_of_item_hired.delete(0, 'end')
+    customer_receipt.delete(0, 'end')
+    total_entries += 1
 
+
+# Deletes a row from the list
 def delete_row():
-    pass
+    # Global variables that are used
+    global customer_details, delete_item, total_entries, name_count
+
+    # Finding which row that is going to be deleted and removed it from the list
+    del customer_details[int(delete_item.get())]
+    total_entries -= 1
+    delete_item.delete(0, 'end')
+    # clear the last item on the displayed GUI
+    Label(main_window, text="       ").grid(column=0, row=name_count + 8)
+    Label(main_window, text="       ").grid(column=1, row=name_count + 8)
+    Label(main_window, text="       ").grid(column=2, row=name_count + 8)
+    Label(main_window, text="       ").grid(column=3, row=name_count + 8)
+    Label(main_window, text="       ").grid(column=4, row=name_count + 8)
+    # Print all other items in the list after that
+    print_customer_details()
 
 
 # Set up for buttons, a function
