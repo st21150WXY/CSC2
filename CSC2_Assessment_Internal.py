@@ -41,12 +41,50 @@ def print_customer_details():
         name_count += 1
 
 
+# Validity Checker
+def checking_inputs():
+    # Global variables that are used
+    global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries
+    input_check = 0
+    Label(main_window, text="               ").grid(column=2, row=1)
+    Label(main_window, text="               ").grid(column=2, row=2)
+    Label(main_window, text="               ").grid(column=2, row=3)
+    Label(main_window, text="               ").grid(column=2, row=4)
+    # Checks if the customer name is not blank, if it is, print error text
+    if len(customer_name.get()) == 0:
+        Label(main_window, text="Required", fg='red').grid(column=2, row=1)
+        input_check = 1
+    # Checks if the item hired is not blank, if it is, print error text
+    if len(item_hired.get()) == 0:
+        Label(main_window, text="Required", fg='red').grid(column=2, row=2)
+        input_check = 1
+    # Checks how many of the item is hired with an amount between 1 and 500,
+    # if it is not entered or not within range, print error text
+    if number_of_item_hired.get().isdigit():
+        if int(number_of_item_hired.get()) < 1 or int(number_of_item_hired.get()) > 500:
+            Label(main_window, text="1-500 only", fg='red').grid(column=2, row=3)
+            input_check = 1
+    else:
+        Label(main_window, text="1-500 only", fg='red').grid(column=2, row=3)
+        input_check = 1
+    # Checks if the customer receipt is not blank and an integer only, if it is, print error text
+    if item_hired.get().isdigit():
+        if len(item_hired.get()) == 0:
+            Label(main_window, text="Required, Integer only", fg='red').grid(column=2, row=2)
+            input_check = 1
+    # Appends the details if ll entries are inputted properly
+    if input_check == 0:
+        append_details()
+        pass
+
+
 # This function will append all the details inputted in the entries and checks them
-def append_inputs():
+def append_details():
     # Global variables that are used
     global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries
     # Appends every detail into one list
     customer_details.append([customer_name.get(), item_hired.get(), number_of_item_hired.get(), customer_receipt.get()])
+    # Deletes all the values inputted in the entry boxes once appended
     customer_name.delete(0, 'end')
     item_hired.delete(0, 'end')
     number_of_item_hired.delete(0, 'end')
@@ -99,7 +137,7 @@ def setup_buttons():
     delete_item.grid(column=4, row=3)
 
     # Button Widgets
-    Button(main_window, text="Append Details", command=append_inputs).grid(column=3, row=2)
+    Button(main_window, text="Append Details", command=checking_inputs).grid(column=3, row=2)
     Button(main_window, text="Print Details", command=print_customer_details, width=10).grid(column=4, row=2, sticky=E)
     Button(main_window, text="Quit", command=quit, width=10).grid(column=4, row=1, sticky=E)
     Button(main_window, text="Delete Row", command=delete_row, width=10).grid(column=4, row=4, sticky=E)
