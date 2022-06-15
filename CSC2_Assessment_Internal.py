@@ -13,7 +13,7 @@ Assessment Summary Details:
 """
 
 from tkinter import *  # This imports all the functions from tkinter module
-
+from random import randint  # This imports randint (random integer) from random module
 
 # This will quit the subroutine
 def quit():
@@ -23,21 +23,22 @@ def quit():
 # Prints the customer details after appending it
 def print_customer_details():
     # Global variables that are used
-    global total_entries, name_count
+    global total_entries, name_count, frame
     name_count = 0
-    Label(main_window, text="Row", font=('bold', 12, 'underline')).grid(column=0, row=8, columnspan=1)
-    Label(main_window, text="Customer Name", font=('bold', 12, 'underline')).grid(column=1, row=8, columnspan=1)
-    Label(main_window, text="Item Hired", font=('bold', 12, 'underline')).grid(column=2, row=8, columnspan=1)
-    Label(main_window, text="Number of Item Hired", font=('bold', 12, 'underline')).grid(column=3, row=8, columnspan=1)
-    Label(main_window, text="Receipt Number", font=('bold', 12, 'underline')).grid(column=4, row=8, columnspan=1)
+    Label(frame, text="Row", font=('bold', 12, 'underline')).grid(column=0, row=8, columnspan=1)
+    Label(frame, text="Customer Name", font=('bold', 12, 'underline')).grid(column=1, row=8, columnspan=1)
+    Label(frame, text="Item Hired", font=('bold', 12, 'underline')).grid(column=2, row=8, columnspan=1)
+    Label(frame, text="Number of Item Hired", font=('bold', 12, 'underline')).grid(column=3, row=8, columnspan=1)
+    Label(frame, text="Receipt Number", font=('bold', 12, 'underline')).grid(column=4, row=8, columnspan=1)
+    frame.grid(column=5, row=1, columnspan=1, rowspan=10, sticky=N)
 
     # Multi-Dimensional List
     while name_count < total_entries:
-        Label(main_window, text=name_count).grid(column=0, row=name_count + 9, columnspan=1)
-        Label(main_window, text=(customer_details[name_count][0])).grid(column=1, row=name_count + 9, columnspan=1)
-        Label(main_window, text=(customer_details[name_count][1])).grid(column=2, row=name_count + 9, columnspan=1)
-        Label(main_window, text=(customer_details[name_count][2])).grid(column=3, row=name_count + 9, columnspan=1)
-        Label(main_window, text=(customer_details[name_count][3])).grid(column=4, row=name_count + 9, columnspan=1)
+        Label(frame, text=name_count).grid(column=0, row=name_count + 9, columnspan=1)
+        Label(frame, text=(customer_details[name_count][0])).grid(column=1, row=name_count + 9, columnspan=1)
+        Label(frame, text=(customer_details[name_count][1])).grid(column=2, row=name_count + 9, columnspan=1)
+        Label(frame, text=(customer_details[name_count][2])).grid(column=3, row=name_count + 9, columnspan=1)
+        Label(frame, text=(customer_details[name_count][3])).grid(column=4, row=name_count + 9, columnspan=1)
         name_count += 1
 
 
@@ -46,10 +47,8 @@ def checking_inputs():
     # Global variables that are used
     global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries
     input_check = 0
-    Label(main_window, text="               ").grid(column=2, row=1)
-    Label(main_window, text="               ").grid(column=2, row=2)
-    Label(main_window, text="               ").grid(column=2, row=3)
-    Label(main_window, text="               ").grid(column=2, row=4)
+    for label_spacing in range(3):  # Loops 4 times
+        Label(main_window, text="               ").grid(column=2, row=1 + label_spacing)
     # Checks if the customer name is not blank, if it is, print error text
     if len(customer_name.get()) == 0:
         Label(main_window, text="Required", fg='red').grid(column=2, row=1)
@@ -72,6 +71,10 @@ def checking_inputs():
         if len(item_hired.get()) == 0:
             Label(main_window, text="Required, Integer only", fg='red').grid(column=2, row=2)
             input_check = 1
+
+    #if not customer_receipt.get():
+
+
     # Appends the details if ll entries are inputted properly
     if input_check == 0:
         append_details()
@@ -92,6 +95,43 @@ def append_details():
     total_entries += 1
 
 
+# Generates a random receipt number
+def generate_receipt_number():
+    # Global variables that are used
+    global customer_receipt, Check_Receipts
+    convert_sets_to_string = " "
+
+    random_length_number = randint(4, 9)
+    Receipt = []
+    for i in range(random_length_number):
+        Receipt_Number = randint(0, 9)
+        Receipt.append(Receipt_Number)
+
+    if Receipt not in Check_Receipts:
+        Check_Receipts.append(Receipt)
+        convert_sets = Receipt
+        for join in range(len(convert_sets)):
+            convert_sets_to_string = "".join(str(joined_receipt_num) for joined_receipt_num in convert_sets)
+
+        customer_receipt.delete(0, 'end')
+        customer_receipt.insert(0, f"#{convert_sets_to_string}")
+    else:
+        while Receipt in Check_Receipts:
+            for i in range(random_length_number):
+                Receipt_Number = randint(0, 9)
+                Receipt.append(Receipt_Number)
+            break
+
+        if Receipt not in Check_Receipts:
+            Check_Receipts.append(Receipt)
+            convert_sets = Receipt
+            for join in range(len(convert_sets)):
+                convert_sets_to_string = "".join(str(joined_receipt_num) for joined_receipt_num in convert_sets)
+
+            customer_receipt.delete(0, 'end')
+            customer_receipt.insert(0, f"#{convert_sets_to_string}")
+
+
 # Deletes a row from the list
 def delete_row():
     # Global variables that are used
@@ -101,12 +141,19 @@ def delete_row():
     del customer_details[int(delete_item.get())]
     total_entries -= 1
     delete_item.delete(0, 'end')
-    # clear the last item on the displayed GUI
+
+    # Makes a for loop for changing variable to be 'widget' and inside the frame.customer_info()...
+    # This will run and destroy the widget in frame.customer_info
+    for widget in frame.winfo_children():
+        widget.destroy()
+    frame.pack_forget()  # This basically removed the frame completely once destroyed
+
+    """# clear the last item on the displayed GUI
     Label(main_window, text="       ").grid(column=0, row=name_count + 8)
     Label(main_window, text="       ").grid(column=1, row=name_count + 8)
     Label(main_window, text="       ").grid(column=2, row=name_count + 8)
     Label(main_window, text="       ").grid(column=3, row=name_count + 8)
-    Label(main_window, text="       ").grid(column=4, row=name_count + 8)
+    Label(main_window, text="       ").grid(column=4, row=name_count + 8)"""
     # Print all other items in the list after that
     print_customer_details()
 
@@ -117,7 +164,7 @@ def setup_buttons():
     global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries, delete_item
 
     # Title
-    Label(main_window, text="Julie's Tracker", font=25).grid(columnspan=5, row=0, sticky=N)
+    Label(main_window, text="Julie's Tracker", font=30).grid(columnspan=7, row=0, sticky=N)
 
     # Creates an empty entry and labels along with a dropdown menu
     Label(main_window, text="Customer Name").grid(column=0, row=1, sticky=E)
@@ -132,26 +179,33 @@ def setup_buttons():
     Label(main_window, text="Receipt Number").grid(column=0, row=4, sticky=E)
     customer_receipt = Entry(main_window)
     customer_receipt.grid(column=1, row=4)
-    Label(main_window, text="Row #").grid(column=3, row=3, sticky=E)
+    Label(main_window, text="Row #").grid(column=0, row=9, sticky=E)
     delete_item = Entry(main_window)
-    delete_item.grid(column=4, row=3)
+    delete_item.grid(column=1, row=9)
 
     # Button Widgets
-    Button(main_window, text="Append Details", command=checking_inputs).grid(column=3, row=2)
-    Button(main_window, text="Print Details", command=print_customer_details, width=10).grid(column=4, row=2, sticky=E)
-    Button(main_window, text="Quit", command=quit, width=10).grid(column=4, row=1, sticky=E)
-    Button(main_window, text="Delete Row", command=delete_row, width=10).grid(column=4, row=4, sticky=E)
+    Button(main_window, text="Quit", command=quit, width=10).grid(column=6, row=0, sticky=E)
+    for spacing in range(5):  # a 'for loop' for making a gap, 5 is the number of times it will loop [range being 5]
+        Button(main_window, text="Append Details", command=checking_inputs).grid(column=1, row=6)
+        Button(main_window, text="Print Details", command=print_customer_details, width=10).grid(column=2, row=6, sticky=E)
+        if spacing != 2:
+            Label(main_window, text="               ").grid(column=2, row=5 + spacing)
+    Button(main_window, text="Generate", command=generate_receipt_number, width=10).grid(column=2, row=4, sticky=E)
+    Button(main_window, text="Delete Row", command=delete_row, width=10).grid(column=2, row=9, sticky=E)
     Label(main_window, text="               ").grid(column=2, row=1)
 
 def main():
     # These global variables are used to define variables that are used
-    global main_window
-    global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries
+    global main_window, frame
+    global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries, Check_Receipts
     customer_details = []  # Creating an empty list
     total_entries = 0
+    Check_Receipts = []
     # Creating the GUI and setup
     main_window = Tk()
+    frame = Frame(main_window)
     main_window.title("App")
+    main_window.geometry("920x500")
     setup_buttons()
     main_window.mainloop()
 
