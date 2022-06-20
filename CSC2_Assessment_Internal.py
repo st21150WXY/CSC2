@@ -20,6 +20,10 @@ from random import randint  # This imports randint (random integer) from random 
 def quit():
     main_window.destroy()
 
+def close_viewer():
+    global new_window
+    new_window.destroy()
+
 
 # Prints the customer details after appending it
 def print_customer_details():
@@ -41,6 +45,22 @@ def print_customer_details():
         Label(frame, text=(customer_details[name_count][2])).grid(column=3, row=name_count + 9, columnspan=1)
         Label(frame, text=(customer_details[name_count][3])).grid(column=4, row=name_count + 9, columnspan=1)
         name_count += 1
+
+
+# View Details for the specific customer
+def view_details(name_clicked):
+    # These are the global variables that will be used
+    global new_window
+    global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, Check_Receipts
+
+    # Creating new window
+    new_window = Toplevel()
+    new_window.title(f"{name_clicked} Receipt")
+    new_window.geometry("360x500")
+    for check_for_customer_details in range(len(customer_details)):
+        if customer_details[check_for_customer_details][0] == name_clicked:
+            Button(new_window, text="Close", command=close_viewer, width=10).grid(column=0, row=0, sticky=NE)
+            Label(new_window, text=f"{name_clicked}", font=('bold', 15, 'underline')).grid(column=0, row=1, sticky=N, padx=159)
 
 
 # Validity Checker
@@ -134,6 +154,8 @@ def checking_inputs():
 # This function will append all the details inputted in the entries and checks them
 def append_details():
     # Global variables that are used
+    global frame2, name_count2, name_of_customer, details_button, customer_view_details, specified_buttons
+    name_count2 = 0
     global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries
     # Appends every detail into one list
     customer_details.append([customer_name.get(), item_hired.get(), number_of_item_hired.get(), customer_receipt.get()])
@@ -143,6 +165,19 @@ def append_details():
     number_of_item_hired.delete(0, 'end')
     customer_receipt.delete(0, 'end')
     total_entries += 1
+
+    # Creating the Button for Tab 2 and Appending the customer details in them
+    while name_count2 < total_entries:
+        Label(frame2, text=f"{customer_details[name_count2][0]}", font=('bold', 12)).grid(column=1, row=3 + name_count2)
+        customer_view_details.append("Button" + str(name_count2 + 1))
+
+        for details in range(len(customer_view_details)):
+            specified_buttons.append(
+                Button(frame2, text="View Details",
+                       command=lambda counter=name_count2: view_details(customer_details[counter][0]))
+                .grid(column=2, row=3 + name_count2))
+        name_count2 += 1
+    customer_view_details.pop(0)
 
 
 # Generates a random receipt number
@@ -185,7 +220,7 @@ def generate_receipt_number():
 # Deletes a row from the list
 def delete_row():
     # Global variables that are used
-    global customer_details, delete_item, total_entries, name_count, Check_Receipts
+    global customer_details, delete_item, total_entries, name_count, Check_Receipts, name_of_customer
 
     # Finding which row that is going to be deleted and removed it from the list
     del customer_details[int(delete_item.get())]
@@ -199,12 +234,6 @@ def delete_row():
         widget.destroy()
     frame.pack_forget()  # This basically removed the frame completely once destroyed
 
-    """# clear the last item on the displayed GUI
-    Label(main_window, text="       ").grid(column=0, row=name_count + 8)
-    Label(main_window, text="       ").grid(column=1, row=name_count + 8)
-    Label(main_window, text="       ").grid(column=2, row=name_count + 8)
-    Label(main_window, text="       ").grid(column=3, row=name_count + 8)
-    Label(main_window, text="       ").grid(column=4, row=name_count + 8)"""
     # Print all other items in the list after that
     print_customer_details()
 
@@ -212,11 +241,13 @@ def delete_row():
 # Set up for buttons, a function
 def setup_buttons():
     # These global variables are used to define variables that are used
-    global tab1, tab2
+    global tab1, tab2, frame2, list_num
     global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries, delete_item
 
     # Title
     Label(tab1, text="Julie's Tracker", font=('bold', 18, 'underline')).grid(columnspan=7, row=0, sticky=N)
+    # Title for Second Tab
+    Label(tab2, text="Customer Receipt Details", font=('bold', 16, 'underline')).grid(columnspan=7, row=0, sticky=N)
 
     # Creates an empty entry and labels along with a dropdown menu
     Label(tab1, text="Customer Name").grid(column=0, row=2, sticky=E)
@@ -235,9 +266,14 @@ def setup_buttons():
     delete_item = Entry(tab1)
     delete_item.grid(column=1, row=10)
 
+    # Tab 2 Details
+    Label(frame2, text="Customer Name", font=('bold', 12, 'underline')).grid(column=1, row=1, columnspan=1, padx=105)
+    Label(frame2, text="Details", font=('bold', 12, 'underline')).grid(column=2, row=1, columnspan=1, padx=225)
+    frame2.grid(column=0, row=1, columnspan=1, rowspan=10, sticky=N)
+
     # Button Widgets
     Button(tab1, text="Quit", command=quit, width=10).grid(column=6, row=0, sticky=E)  # Make quit button for Tab1
-    Button(tab2, text="Quit", command=quit, width=10).grid(column=6, row=0, sticky=E)  # Make quit button for Tab2
+    Button(tab2, text="Quit", command=quit, width=10).grid(column=3, row=0, sticky=E)  # Make quit button for Tab2
     for spacing in range(5):  # a 'for loop' for making a gap, 5 is the number of times it will loop [range being 5]
         Button(tab1, text="Append Details", command=checking_inputs).grid(column=1, row=7)
         Button(tab1, text="Print Details", command=print_customer_details, width=10).grid(column=2, row=7, sticky=E)
@@ -247,11 +283,16 @@ def setup_buttons():
     Button(tab1, text="Delete Row", command=delete_row, width=10).grid(column=2, row=10, sticky=E)
     Label(tab1, text="               ").grid(column=2, row=2)
 
+
 def main():
     # These global variables are used to define variables that are used
-    global main_window, frame, tab1, tab2
-    global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries, Check_Receipts
+    global main_window, frame, frame2, tab1, tab2
+    global customer_details, customer_name, item_hired, number_of_item_hired, \
+        customer_receipt, total_entries, Check_Receipts, customer_view_details, specified_buttons
     customer_details = []  # Creating an empty list
+    customer_view_details = []  # This is to store all the Button Number/ID
+    specified_buttons = []  # This is to store all the Buttons specified with functions
+
     total_entries = 0
     Check_Receipts = []
     # Creating the GUI and setup
@@ -261,6 +302,7 @@ def main():
     tab1 = Frame(Tabs)
     frame = Frame(tab1)
     tab2 = Frame(Tabs)
+    frame2 = Frame(tab2)
     Tabs.add(tab1, text="Customer Receipts")
     Tabs.add(tab2, text="View Customer Receipts")
     Tabs.pack(expand=True, fill="both")
