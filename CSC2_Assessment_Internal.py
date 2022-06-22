@@ -83,8 +83,9 @@ def print_view_customer_details():
     name_count2 = 0
     global customer_details, customer_name, item_hired, number_of_item_hired, customer_receipt, total_entries, Check_Receipts
 
-
-    total_entries += 1
+    total_entries = 0
+    for how_many_in_list in range(len(customer_details)):
+        total_entries += 1
 
     increment_value = 0
     while name_count2 < total_entries:
