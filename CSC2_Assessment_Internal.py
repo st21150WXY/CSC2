@@ -9,7 +9,6 @@ Assessment Summary Details:
 - GUI (Base)
 - Button Widgets
 - Looping
-# CONTINUE ON DELETING SYSTEM, WHEN REMOVE FROM TAB 1 and DELETE from TAB 2, it breaks
 """
 
 from tkinter import *  # This imports all the functions from tkinter module
