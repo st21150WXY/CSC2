@@ -110,10 +110,10 @@ def print_view_customer_details():
 
     increment_value = 0
     while name_count2 < total_entries:
-        print()
-        print(customer_details)
-        print(save_details)
-        print(Check_Receipts)
+        #print()
+        #print(customer_details)
+        #print(save_details)
+        #print(Check_Receipts)
         if len(save_details) != 0:
             if total_number_of_entries[increment_value][0] in add_name:
                 Label(frame2, text=f"{total_number_of_entries[name_count2][0]}", font=('bold', 12)).grid(column=1, row=3 + name_count2)
@@ -138,7 +138,7 @@ def print_view_customer_details():
 
             increment_value += 1
             name_count2 += 1
-            print(increment_value)
+            #print(increment_value)
 
         if len(customer_details) == 0:
             if len(save_details) == 0:
@@ -177,8 +177,8 @@ def print_customer_details():
     total_entries = 0
     for how_many_in_list in range(len(customer_details)):
         total_entries += 1
-    print("---------------------")
-    print(total_entries)
+    #print("---------------------")
+    #print(total_entries)
 
     # Multi-Dimensional List
     while name_count < total_entries:
@@ -328,7 +328,7 @@ def checking_inputs():
 
                 customer_receipt.delete(0, 'end')
                 customer_receipt.insert(0, f"#{convert_sets_to_string}")
-                print(convert_sets_to_string)
+                #print(convert_sets_to_string)
 
     # Checks if the customer receipt is not blank and an integer only, if it is, print error text
     # Non hashtag receipt numbers are Types out normally, whereas the receipt number with hashtags are -
@@ -371,7 +371,7 @@ def append_details():
                 customer_details.pop()
                 for check_customer_list2 in range(len(customer_details)):
                     if customer_details[check_customer_list2][0] == customer_name.get():
-                        print("A printed")  # This is for testing purposes
+                        #print("A printed")  # This is for testing purposes
                         customer_details[check_customer_list2][1].append(item_hired.get())
                         customer_details[check_customer_list2][2].append(number_of_item_hired.get())
                         total_number_of_entries[check_customer_list2][1].append(item_hired.get())
@@ -386,7 +386,7 @@ def append_details():
 
     # This checks if the name entered is in the customer_details list, if it is not then it will append customer details
     for check_name in range(len(save_details)):
-        print(customer_details)
+        #print(customer_details)
         if save_details[check_name][0] != customer_name.get():
             name_checker += 1
             if name_checker >= len(save_details):
@@ -413,7 +413,7 @@ def append_details():
     # It checks if the name entered is the same, if so it will add the item to the matching name in a list
     for item_check in range(len(customer_details)):
         if save_details[item_check][0] == customer_name.get():
-            print("B printed")
+            #print("B printed")
             save_details[item_check][1].append(item_hired.get())
             save_details[item_check][2].append(number_of_item_hired.get())
             break
@@ -422,7 +422,7 @@ def append_details():
         for item_check2 in range(len(customer_details)):
             if save_details[item_check2][0] == customer_name.get():
                 if num > 1:
-                    print("C printed")
+                    #print("C printed")
                     save_details[item_check2][1].append(item_hired.get())
                     save_details[item_check2][2].append(number_of_item_hired.get())
                     break
@@ -435,7 +435,7 @@ def append_details():
     number_of_item_hired.delete(0, 'end')
     customer_receipt.delete(0, 'end')
 
-    print(total_number_of_entries)
+    #print(total_number_of_entries)
 
     # If there are no duplicates of the same nme then create a new label and view button
     if same_name < 2:
