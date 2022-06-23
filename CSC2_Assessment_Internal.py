@@ -226,7 +226,7 @@ def view_details(name_clicked):
 
     for check_for_customer_details in range(len(save_details)):
         if save_details[check_for_customer_details][0] == name_clicked:
-            print(save_details)
+            #print(save_details)
             Label(new_window, text=f"Receipt Number: {save_details[check_for_customer_details][3]}").grid(column=0, row=1, sticky=NW)
             Label(new_window, text=f"{name_clicked}", font=('bold', 15, 'underline')).grid(column=1, row=2, sticky=N)
             Label(new_window, text="Items:", font=('bold', 13, 'underline')).grid(column=0, row=3, sticky=W)
@@ -520,20 +520,28 @@ def delete_row():
     # Global variables that are used
     global customer_details, delete_item, total_entries, name_count, Check_Receipts
 
-    # Finding which row that is going to be deleted and removed it from the list
-    del customer_details[int(delete_item.get())]
-    del Check_Receipts[int(delete_item.get())]
-    total_entries -= 1
-    delete_item.delete(0, 'end')
+    if len(delete_item.get()) != 0:
+        Label(tab1, text="                                     ", fg='red').grid(column=1, row=11)
 
-    # Makes a for loop for changing variable to be 'widget' and inside the frame.customer_info()...
-    # This will run and destroy the widget in frame.customer_info
-    for widget in frame.winfo_children():
-        widget.destroy()
-    frame.pack_forget()  # This basically removed the frame completely once destroyed
+        try:
+            # Finding which row that is going to be deleted and removed it from the list
+            del customer_details[int(delete_item.get())]
+            del Check_Receipts[int(delete_item.get())]
+            total_entries -= 1
+            delete_item.delete(0, 'end')
 
-    # Print all other items in the list after that
-    print_customer_details()
+            # Makes a for loop for changing variable to be 'widget' and inside the frame.customer_info()...
+            # This will run and destroy the widget in frame.customer_info
+            for widget in frame.winfo_children():
+                widget.destroy()
+            frame.pack_forget()  # This basically removed the frame completely once destroyed
+
+            # Print all other items in the list after that
+            print_customer_details()
+        except:
+            Label(tab1, text="Row Not Found", fg='red').grid(column=1, row=11)
+    else:
+        Label(tab1, text="Enter Row Number!", fg='red').grid(column=1, row=11)
 
 
 # Set up for buttons, a function
