@@ -281,13 +281,17 @@ def checking_inputs():
         input_check = 1
     # Checks how many of the item is hired with an amount between 1 and 500,
     # if it is not entered or not within range, print error text
+    if len(number_of_item_hired.get()) == 0:
+        Label(tab1, text="Required", fg='red').grid(column=2, row=4)
+        input_check = 1
     if number_of_item_hired.get().isdigit():
         if int(number_of_item_hired.get()) < 1 or int(number_of_item_hired.get()) > 500:
             Label(tab1, text="1-500 only", fg='red').grid(column=2, row=4)
             input_check = 1
     else:
-        Label(tab1, text="Integer Only", fg='red').grid(column=2, row=4)
-        input_check = 1
+        if len(number_of_item_hired.get()) != 0:
+            Label(tab1, text="Integer Only", fg='red').grid(column=2, row=4)
+            input_check = 1
 
     # Checks customer receipt if the entry is empty, if empty set value for the entry to a random receipt number
     if not customer_receipt.get():
